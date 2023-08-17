@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
+
 from user import Base, User
 
 
@@ -52,3 +53,18 @@ class DB:
                 if getattr(usr, k) == v:
                     return usr
         raise NoResultFound
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """The method will use find_user_by to locate
+        the user to update, then will update the user’s attributes
+        """
+        try:
+            usr = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise ValueError()
+        for k, v in kwargs.items():
+            if hasattr(usr, k):
+                setattr(usr, k, v)
+            else:
+                raise ValueError
+        self._session.commit()
