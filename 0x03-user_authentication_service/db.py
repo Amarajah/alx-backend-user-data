@@ -36,7 +36,7 @@ class DB:
         """returns a User object. The method
         should save the user to the database"""
         new = User(email=email, hashed_password=hashed_password)
-        self._session.add(new_user)
+        self._session.add(new)
         self._session.commit()
         return new
 
